@@ -2,6 +2,8 @@ package pro.sky.employees2;
 
 import java.util.Objects;
 
+import static org.apache.tomcat.util.IntrospectionUtils.capitalize;
+
 public class Employee {
     private String lastName;
     private String firstName;
@@ -11,7 +13,9 @@ public class Employee {
 
     public Employee(String lastName, String firstName, Integer department, Integer salary) {
         this.lastName = lastName;
+        this.lastName = capitalize(lastName.toLowerCase());
         this.firstName = firstName;
+        this.firstName = capitalize(firstName.toLowerCase());
         this.department = department;
         this.salary = salary;
     }

@@ -6,7 +6,7 @@ public interface EmployeeService {
 
     List<Employee> listOfEmployees();
 
-    Employee addEmployee(String firstName, String lastName, Integer department, Integer salary) throws EmployeeAlreadyAddedException;
+    Employee addEmployee(String firstName, String lastName, Integer department, Integer salary) throws EmployeeAlreadyAddedException, EmployeeNotFoundException;
 
     Employee deleteEmployee(String firstName, String lastName, Integer department, Integer salary) throws EmployeeNotFoundException;
 

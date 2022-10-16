@@ -1,5 +1,6 @@
 package pro.sky.employees2;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -11,7 +12,8 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final Object ERR_EMPL_NOT_FOUND = "Сотрудник с таким именем не существует";
+    private final String ERR_EMPL_NOT_FOUND = "Сотрудник с таким именем не существует";
+    private final String ERR_INVALID_NAME = "Неверно введено имя";
     private final List<Employee> employeesList;
 
     public EmployeeServiceImpl(List<Employee> employeesList) {
@@ -21,7 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> listOfEmployees() {
         employeesList.add(new Employee("Соколов", "Артем", 1, 20500));
-        employeesList.add(new Employee("Панкратова", "Ангелина", 2, 22500));
+        employeesList.add(new Employee("Панкратова", "Пнгелина", 2, 22500));
         employeesList.add(new Employee("Орлов", "Дмитрий", 3, 24500));
         employeesList.add(new Employee("Кузнецова", "Софья", 4, 26500));
         employeesList.add(new Employee("Соловьев", "Вячеслав", 5, 28500));
@@ -35,12 +37,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public Employee addEmployee(String firstName, String lastName, Integer department, Integer salary) throws EmployeeAlreadyAddedException {
-        Employee listOfEmployee = new Employee(firstName, lastName, department, salary);
+    public Employee addEmployee(String firstName, String lastName, Integer department, Integer salary) throws EmployeeAlreadyAddedException, EmployeeNotFoundException {
+        Employee listOfEmployee = new Employee(capsLetter(firstName), capsLetter(lastName), department, salary);
+        char[] check = "0123456789!@#$%^&*()-_=+".toCharArray();
 
-        if (employeesList.contains(listOfEmployee)) {
+        if (StringUtils.containsNone(firstName, check) || StringUtils.containsNone(lastName, check)) {
+            throw new EmployeeNotFoundException(ERR_INVALID_NAME);
+        } else if (StringUtils.isAlpha(firstName) && StringUtils.isAlpha(lastName)) {
+            throw new EmployeeNotFoundException(ERR_INVALID_NAME);
+        } else if (employeesList.contains(listOfEmployee)) {
             throw new EmployeeAlreadyAddedException();
         }
+
         employeesList.add(listOfEmployee);
         return listOfEmployee;
     }
@@ -52,12 +60,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeesList.contains(listOfEmployee)) {
             employeesList.remove(listOfEmployee);
             return listOfEmployee;
+        } else if (StringUtils.isAlpha(firstName) && StringUtils.isAlpha(lastName)) {
+            throw new EmployeeNotFoundException(ERR_INVALID_NAME);
         }
         throw new EmployeeNotFoundException(ERR_EMPL_NOT_FOUND);
     }
 
     @Override
     public Employee toFindEmployee(String firstName, String lastName) throws EmployeeNotFoundException {
+        if (StringUtils.isAlpha(firstName) && StringUtils.isAlpha(lastName)) {
+            throw new EmployeeNotFoundException(ERR_INVALID_NAME);
+        }
         final Optional<Employee> listOfEmployee = employeesList.stream()
                 .filter(employee -> employee.getFirstName().equals(firstName) && employee.getLastName().equals(lastName))
                 .findAny();
@@ -97,5 +110,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return Collections.unmodifiableList(employeesList.stream()
                 .sorted(Comparator.comparingInt(employee -> employee.getDepartment()))
                 .collect(Collectors.toList()));
+    }
+
+    private String capsLetter(String string) {
+        return StringUtils.upperCase(string.substring(0, 1) + string.substring(1));
     }
 }

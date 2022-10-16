@@ -17,7 +17,7 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/all")
-    public Object listOfEmployees() {
+    public String listOfEmployees() {
         List<Employee> listOfEmployee = null;
 
         try {
@@ -25,11 +25,11 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 
     @GetMapping(path = "/add")
-    public Object addEmployee(@RequestParam("lastName") String lastName,
+    public String addEmployee(@RequestParam("lastName") String lastName,
                               @RequestParam("firstName") String firstName,
                               @RequestParam("department") Integer department,
                               @RequestParam("salary") Integer salary) throws EmployeeAlreadyAddedException {
@@ -40,11 +40,11 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 
     @GetMapping(path = "/delete")
-    public Object deleteEmployee(@RequestParam("lastName") String lastName,
+    public String deleteEmployee(@RequestParam("lastName") String lastName,
                                  @RequestParam("firstName") String firstName,
                                  @RequestParam("department") Integer department,
                                  @RequestParam("salary") Integer salary) throws EmployeeNotFoundException {
@@ -55,11 +55,11 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 
     @GetMapping(path = "/find")
-    public Object toFindEmployee(@RequestParam("lastName") String lastName,
+    public String toFindEmployee(@RequestParam("lastName") String lastName,
                                  @RequestParam("firstName") String firstName) throws EmployeeNotFoundException {
         Employee listOfEmployee = null;
 
@@ -68,11 +68,11 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 
     @GetMapping(path = "/with")
-    public Object withdrawalOfEmployees() {
+    public String withdrawalOfEmployees() {
         List<Employee> listOfEmployees = null;
 
         try {
@@ -80,11 +80,11 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployees;
+        return listOfEmployees.toString();
     }
 
     @GetMapping(path = "/department/max-salary")
-    public Object maxSalary(@RequestParam("department-max") Integer department) {
+    public String maxSalary(@RequestParam("department-max") Integer department) {
         Employee listOfEmployee = null;
 
         try {
@@ -92,23 +92,23 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 
     @GetMapping(path = "/department/min-salary")
-    public Object minSalary(@RequestParam("department-min") Integer department) {
+    public String minSalary(@RequestParam("department-min") Integer department) {
         Employee listOfEmployee = null;
 
         try {
-            listOfEmployee = employeeService.maxSalary(department);
+            listOfEmployee = employeeService.minSalary(department);
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 
     @GetMapping(path = "/department/department-all")
-    public Object employeesOfTheDepartment(@RequestParam("department-all") Integer department) {
+    public String employeesOfTheDepartment(@RequestParam("department-all") Integer department) {
         List<Employee> listOfEmployee = null;
 
         try {
@@ -116,11 +116,11 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 
     @GetMapping(path = "/department/all")
-    public Object employeesWithDivisionOfDepartments() {
+    public String employeesWithDivisionOfDepartments() {
         List<Employee> listOfEmployee = null;
 
         try {
@@ -128,6 +128,6 @@ public class EmployeeController {
         } catch (Throwable e) {
             return e.getMessage();
         }
-        return listOfEmployee;
+        return listOfEmployee.toString();
     }
 }
